@@ -1,0 +1,35 @@
+<div class="container">
+    <select class="form-control" ng-model="main.currentContestant"
+            ng-options="contestant.name for contestant in main.contestants">
+        <option value="">Choose an Athlete</option>
+    </select>
+
+    <div class="well remote" ng-hide="!main.currentContestant">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Lane</th>
+                <th>Contestant</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{main.currentContestant.lane}}</td>
+                <td>{{main.currentContestant.name}}</td>
+                <td>{{main.currentContestant.score}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="row">
+            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="main.incrementScore()">Add One
+            </button>
+        </div>
+
+        <div class="row">
+            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="main.decrementScore()">Minus One
+            </button>
+        </div>
+    </div>
+</div>

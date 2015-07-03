@@ -1,4 +1,22 @@
-var app = angular.module('leaderboard', ['firebase']);
+var app = angular.module('leaderboard', ['firebase', 'ui.router']);
+
+app.config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/');
+
+    $stateProvider
+        .state('main', {
+            url: '/',
+            templateUrl: 'templates/main.html'
+        })
+        .state('admin', {
+            url: '/admin',
+            templateUrl: 'templates/admin.html'
+        })
+        .state('remote', {
+            url: '/remote',
+            templateUrl: 'templates/remote.html'
+        })
+});
 
 app.constant('FIREBASE_URI', 'PUT_YOUR_FIREBASE_HERE');
 
@@ -7,6 +25,7 @@ app.controller('MainCtrl', function (ContestantsService) {
     main.newContestant = {lane: '', name: '', score: ''};
     main.currentContestant = null;
     main.contestants = ContestantsService.getContestants();
+    console.log(main.contestants)
 
     main.addContestant = function () {
         ContestantsService.addContestant(angular.copy(main.newContestant));

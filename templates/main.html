@@ -1,0 +1,22 @@
+<div class="container">
+    <h3>List</h3>
+
+    <div class="well">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Lane</th>
+                <th>Contestant</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="contestant in main.contestants">
+                <td>{{contestant.lane}}</td>
+                <td>{{contestant.name}}</td>
+                <td>{{contestant.score}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
