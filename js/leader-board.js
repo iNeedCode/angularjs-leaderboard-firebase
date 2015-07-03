@@ -18,14 +18,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         })
 });
 
-app.constant('FIREBASE_URI', 'PUT_YOUR_FIREBASE_HERE');
+app.constant('FIREBASE_URI', 'shining-torch-1269.firebaseio.com');
 
 app.controller('MainCtrl', function (ContestantsService) {
     var main = this;
     main.newContestant = {lane: '', name: '', score: ''};
     main.currentContestant = null;
     main.contestants = ContestantsService.getContestants();
-    console.log(main.contestants)
+    //console.log(main.contestants)
 
     main.addContestant = function () {
         ContestantsService.addContestant(angular.copy(main.newContestant));
