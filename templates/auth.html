@@ -1,0 +1,36 @@
+<nav class="navbar navbar-default" role="navigation" ng-controller="AuthCtrl">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#auth">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">AngularFire Auth</a>
+        </div>
+        <form id="auth" class="navbar-form navbar-right collapse navbar-collapse">
+            <fieldset ng-hide="auth.user">
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="hello@gmx.de" ng-model="email"/>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="123" ng-model="password"/>
+                </div>
+                <button type="submit" class="btn btn-default" ng-click="signIn()">Sign In / Sign Up</button>
+            </fieldset>
+        <span ng-show="auth.user">
+          {{auth.user.name}}
+          <button type="submit" class="btn btn-default" ng-click="auth.$logout()">Sign Out</button>
+        </span>
+        </form>
+        <p id="signed_in_as" class="navbar-text navbar-right" ng-show="auth.user">Signed in as {{auth.user.email}}</p>
+    </div>
+</nav>
+
+<div class="container" ng-controller="AuthCtrl">
+    <div class="alert alert-{{alert.class}}" ng-model="alert.message" ng-show="alert.message">
+        {{alert.message}}
+    </div>
+    <b>{{logged_in}}</b>
+</div>
