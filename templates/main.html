@@ -11,7 +11,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="contestant in main.contestants">
+            <tr ng-repeat="contestant in main.contestants | reverse ">
                 <td>{{contestant.zone}}</td>
                 <td>{{contestant.name}}</td>
                 <td>{{contestant.score}}</td>

@@ -98,10 +98,18 @@ app.controller('MainCtrl', ['$scope', 'Auth', '$location', 'ContestantsService',
     }, true);
 }]);
 
+app.filter('reverse', function() {
+    return function(items) {
+        return items.slice().reverse();
+    };
+});
+
 app.service('ContestantsService', function ($firebaseArray, FIREBASE_URI) {
     var service = this;
     var ref = new Firebase(FIREBASE_URI);
-    var contestants = $firebaseArray(ref);
+    var query = ref.orderByChild('score').limitToLast(10);
+
+    var contestants = $firebaseArray(query);
 
     service.getContestants = function () {
         return contestants;
