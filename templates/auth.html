@@ -27,16 +27,3 @@
         <p id="signed_in_as" class="navbar-text navbar-right" ng-show="auth.user">Signed in as {{auth.user.email}}</p>
     </div>
 </nav>
-
-<div class="container" ng-controller="AuthCtrl as alert">
-    <div class="alert alert-{{alert.class}}" ng-model="alert.message" ng-show="alert.message">
-        {{alert.message}}
-    </div>
-    <b>{{logged_in}}</b>
-</div>
-
-<div class="container">
-    <div class="alert" ng-show="true">
-        test
-    </div>
-</div>

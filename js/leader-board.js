@@ -54,14 +54,14 @@ app.factory('Auth', function () {
 
 app.controller('MainCtrl', ['$scope', 'Auth', '$location', 'ContestantsService', function ($scope, Auth, $location, ContestantsService) {
     var main = this;
-    main.newContestant = {lane: '', name: '', score: ''};
+    main.newContestant = {zone: '', name: '', score: ''};
     main.currentContestant = null;
     main.contestants = ContestantsService.getContestants();
     main.logged_in = false;
 
     main.addContestant = function () {
         ContestantsService.addContestant(angular.copy(main.newContestant));
-        main.newContestant = {lane: '', name: '', score: ''};
+        main.newContestant = {zone: '', name: '', score: ''};
     };
 
     main.updateContestant = function (contestant) {
