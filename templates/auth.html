@@ -28,9 +28,15 @@
     </div>
 </nav>
 
-<div class="container" ng-controller="AuthCtrl">
+<div class="container" ng-controller="AuthCtrl as alert">
     <div class="alert alert-{{alert.class}}" ng-model="alert.message" ng-show="alert.message">
         {{alert.message}}
     </div>
     <b>{{logged_in}}</b>
+</div>
+
+<div class="container">
+    <div class="alert" ng-show="true">
+        test
+    </div>
 </div>

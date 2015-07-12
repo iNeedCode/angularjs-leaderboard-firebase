@@ -1,17 +1,6 @@
 var app = angular.module('leaderboard', ['firebase', 'ui.router']);
 
 
-angular.module('services', [])
-    .factory('state', function () {
-        'use strict';
-
-        var state = {};
-
-        return {
-            state: state
-        };
-    });
-
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
 
@@ -22,11 +11,25 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('admin', {
             url: '/admin',
-            templateUrl: 'templates/admin.html'
+            templateUrl: 'templates/admin.html',
+            resolve: {
+                data: function (Auth, $location) {
+                    if (Auth.isLoggedIn() == false) {
+                        $location.patch("/").replace();
+                    }
+                }
+            }
         })
         .state('remote', {
             url: '/remote',
-            templateUrl: 'templates/remote.html'
+            templateUrl: 'templates/remote.html',
+            resolve: {
+                data: function (Auth, $location) {
+                    if (Auth.isLoggedIn() == false) {
+                        $location.patch("/").replace();
+                    }
+                }
+            }
         })
         .state('auth', {
             url: '/auth',
@@ -36,32 +39,25 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
 app.constant('FIREBASE_URI', 'shining-torch-1269.firebaseio.com');
 
-app.factory('state', function ($rootScope) {
-    'use strict';
-
-    var state;
-
-    var broadcast = function (state) {
-        $rootScope.$broadcast('state.update', state);
-    };
-
-    var update = function (newState) {
-        state = newState;
-        broadcast(state);
-    };
+app.factory('Auth', function () {
+    var user;
 
     return {
-        update: update,
-        state: state
-    };
+        setUser: function (aUser) {
+            user = aUser;
+        },
+        isLoggedIn: function () {
+            return (user) ? user : false;
+        }
+    }
 });
 
-app.controller('MainCtrl', function (ContestantsService, $rootScope) {
+app.controller('MainCtrl', ['$scope', 'Auth', '$location', 'ContestantsService', function ($scope, Auth, $location, ContestantsService) {
     var main = this;
     main.newContestant = {lane: '', name: '', score: ''};
     main.currentContestant = null;
     main.contestants = ContestantsService.getContestants();
-    //console.log(main.contestants)
+    main.logged_in = false;
 
     main.addContestant = function () {
         ContestantsService.addContestant(angular.copy(main.newContestant));
@@ -85,7 +81,22 @@ app.controller('MainCtrl', function (ContestantsService, $rootScope) {
         main.currentContestant.score = parseInt(main.currentContestant.score, 10) - 1;
         main.updateContestant(main.currentContestant);
     };
-});
+
+    //Auth
+    $scope.$watch(Auth.isLoggedIn, function (value, oldValue) {
+
+        if (!value && oldValue) {
+            console.log("Disconnect");
+            $location.path('/auth');
+            main.logged_in = false;
+        }
+
+        if (value) {
+            console.log("Connect");
+            main.logged_in = true;
+        }
+    }, true);
+}]);
 
 app.service('ContestantsService', function ($firebaseArray, FIREBASE_URI) {
     var service = this;
@@ -110,9 +121,8 @@ app.service('ContestantsService', function ($firebaseArray, FIREBASE_URI) {
 });
 
 
-app.controller('AuthCtrl', ['$scope', '$location', '$firebase',
-    function ($scope, $location, $firebase, $rootScope) {
-
+app.controller('AuthCtrl', ['$scope', '$location', '$firebase', 'Auth',
+    function ($scope, $location, $firebase, Auth) {
         $scope.message = "";
         var email = "";
         var password = "";
@@ -144,7 +154,9 @@ app.controller('AuthCtrl', ['$scope', '$location', '$firebase',
                     $scope.message = "Wrong Username/Password;";
                 } else {
                     $location.path("/admin");
-                    console.log(authData);
+                    Auth.setUser(authData);
+                    //console.log("Auth user:");
+                    //console.log(Auth.isLoggedIn());
                 }
             }, {
                 remember: "sessionOnly"

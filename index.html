@@ -9,12 +9,13 @@
 </head>
 <body ng-controller="MainCtrl as main">
 
-<nav class="container nav">
+<nav class="container nav" ng-show="main.logged_in">
     <button ui-sref="main" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-th-list"> main</span>
     </button>
     <button ui-sref="remote" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-tasks"> remote</span>
     </button>
     <button ui-sref="admin" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-lock"> admin</span></button>
+    <button ui-sref="auth" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-log-in"> auth</span></button>
 </nav>
 
 <ui-view></ui-view>
