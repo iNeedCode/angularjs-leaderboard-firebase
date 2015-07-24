@@ -102,8 +102,8 @@ app.controller('MainCtrl', ['$scope', 'Auth', '$location', 'ContestantsService',
     }, true);
 }]);
 
-app.filter('reverse', function() {
-    return function(items) {
+app.filter('reverse', function () {
+    return function (items) {
         return items.slice().reverse();
     };
 });
@@ -111,8 +111,8 @@ app.filter('reverse', function() {
 app.service('ContestantsService', function ($firebaseArray, FIREBASE_URI) {
     var service = this;
     var ref = new Firebase(FIREBASE_URI);
-    var query = ref.orderByChild('score').limitToLast(10);
 
+    var query = ref.orderByChild('score').limitToLast(300);
     var contestants = $firebaseArray(query);
 
     service.getContestants = function () {
@@ -187,13 +187,7 @@ app.controller('ImageUpload', ['$scope', '$log',
             imageUpload = {
                 isUploading: true,
                 data: image.data,
-                //thumbnail: image.thumbnail,
                 name: image.filename
-                //,
-                //author: {
-                //    provider: $scope.auth.user.provider,
-                //    id: $scope.auth.user.id
-                //}
             };
 
             safename = imageUpload.name.replace(/\.|\#|\$|\[|\]|-|\//g, "");
@@ -211,7 +205,7 @@ app.controller('ImageUpload', ['$scope', '$log',
                         image.data = undefined;
                         image.filename = undefined;
                     });
-                }else{
+                } else {
                     $scope.error = 'There was an error while uploading your image: ' + err;
                 }
             });
@@ -219,9 +213,9 @@ app.controller('ImageUpload', ['$scope', '$log',
     }
 ]);
 
-app.directive('fbImageUpload', [function() {
+app.directive('fbImageUpload', [function () {
     return {
-        link: function(scope, element, attrs) {
+        link: function (scope, element, attrs) {
             // Modified from https://developer.mozilla.org/en-US/docs/Web/API/FileReader
             var fileReader = new FileReader();
             var fileFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
@@ -233,7 +227,7 @@ app.directive('fbImageUpload', [function() {
                 var isUploading = scope.image.isUploading;
                 if (isUploading && !wasUploading) {
                     wasUploading = true;
-                }else if (!isUploading && wasUploading) {
+                } else if (!isUploading && wasUploading) {
                     wasUploading = false;
                     element.parent().parent()[0].reset();
                 }
@@ -245,7 +239,7 @@ app.directive('fbImageUpload', [function() {
                 });
             };
 
-            var load_image = function(imageInput) {
+            var load_image = function (imageInput) {
                 if (imageInput.files.length === 0) {
                     return;
                 }
@@ -259,7 +253,7 @@ app.directive('fbImageUpload', [function() {
                     scope.image.valid = false;
                     scope.$apply();
                     return;
-                }else{
+                } else {
                     scope.error = '';
                     scope.image.valid = true;
                 }
@@ -268,7 +262,7 @@ app.directive('fbImageUpload', [function() {
                 scope.$apply();
             };
 
-            element[0].onchange = function() {
+            element[0].onchange = function () {
                 load_image(element[0]);
             };
         },
@@ -286,13 +280,13 @@ app.directive('fbSrc', ['$log', function ($log) {
     return {
         link: function (scope, elem, attrs) {
             var safename = attrs.fpSrc.replace(/\.|\#|\$|\[|\]|-|\//g, "");
-            var dataRef = new Firebase( [scope.firebaseUrl, 'images', safename].join('/') );
+            var dataRef = new Firebase([scope.firebaseUrl, 'images', safename].join('/'));
             elem.attr('alt', attrs.fpSrc);
             dataRef.once('value', function (snapshot) {
                 var image = snapshot.val();
                 if (!image) {
                     $log.log('It appears the image ' + attrs.fpSrc + ' does not exist.');
-                }else{
+                } else {
                     elem.attr('src', image.data);
                 }
             });
